@@ -1,20 +1,19 @@
 {
   "name": "practisecicd",
   "version": "1.0.0",
+  "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
   "devDependencies": {
     "@playwright/test": "^1.55.0",
-    "@types/node": "^24.5.2",
-    "scripts":{
-      "test":"playwright test",
-      "test:headed":"playwright test --headed",
-      "test:ui":"playwright test --ui"
-    }
+    "@types/node": "^24.5.2"
   },
   "dependencies": {
     "playwright": "^1.55.0"
