@@ -22,13 +22,10 @@ jobs:
     - name: Install Playwright browsers
       run: npx playwright install --with-deps
     - name: Run Playwright tests
-<<<<<<< HEAD
-=======
       env:
         BASE_URL: https://demoblaze.com/index.html
         TEST_USERNAME: pavanol
         TEST_PASSWORD: ${{secrets.TEST_PASSWORD}}
->>>>>>> 23e4420f43d678711e68632cc29fe74d7365cd0e
       run: npm test
     - uses: actions/upload-artifact@v4
       if: always()
