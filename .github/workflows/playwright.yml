@@ -1,5 +1,5 @@
 # Name changed to reflect the new reporting step
-name: Playwright Tests & Report
+name: Playwright Tests
 
 on:
   push:
