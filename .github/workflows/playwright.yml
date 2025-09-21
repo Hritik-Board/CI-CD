@@ -12,6 +12,10 @@ jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false # IMPORTANT: Let all jobs finish even if one fails
+      matrix:
+        shard: [1, 2, 3, 4]
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
@@ -26,10 +30,10 @@ jobs:
         BASE_URL: https://demoblaze.com/index.html
         TEST_USERNAME: pavanol
         TEST_PASSWORD: ${{secrets.TEST_PASSWORD}}
-      run: npm test
+      run: npx playwright test --shard=${{ matrix.shard }}/${{ strategy.job-total }}
     - uses: actions/upload-artifact@v4
       if: always()
       with:
-        name: playwright-report
+        name: playwright-report-${{ matrix.shard }}
         path: playwright-report/
         retention-days: 30
