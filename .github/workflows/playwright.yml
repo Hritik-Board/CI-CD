@@ -5,6 +5,8 @@ on:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
+  schedule:
+    - cron: '*/5 * * * *'
 
 jobs:
   test:
@@ -20,6 +22,10 @@ jobs:
     - name: Install Playwright browsers
       run: npx playwright install --with-deps
     - name: Run Playwright tests
+      env:
+        BASE_URL: https://demoblaze.com/index.html
+        TEST_USERNAME: pavanol
+        LOGIN_PASSWORD: ${{secrets.LOGIN_PASSWORD}}
       run: npm test
     - uses: actions/upload-artifact@v4
       if: always()
