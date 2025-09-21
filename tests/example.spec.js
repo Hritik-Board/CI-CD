@@ -23,7 +23,7 @@ test('login test', async ({ page }) => {
   await page.locator("#loginusername").fill(username);
   await page.locator("#loginpassword").fill(password);
 
-  // click modal "Log in" button (specific)
+  // click modal "Log in" button (specific
   await page.locator('#logInModal').getByRole('button', { name: 'Log in' }).click();
 
 
