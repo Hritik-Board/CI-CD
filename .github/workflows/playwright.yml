@@ -25,7 +25,7 @@ jobs:
       env:
         BASE_URL: https://demoblaze.com/index.html
         TEST_USERNAME: pavanol
-        LOGIN_PASSWORD: ${{secrets.LOGIN_PASSWORD}}
+        TEST_PASSWORD: ${{secrets.TEST_PASSWORD}}
       run: npm test
     - uses: actions/upload-artifact@v4
       if: always()
