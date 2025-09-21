@@ -1,5 +1,4 @@
-# Name changed to reflect the new reporting step
-name: Playwright Tests
+name: Playwright Tests & Report
 
 on:
   push:
@@ -7,20 +6,15 @@ on:
   pull_request:
     branches: [ main, master ]
   schedule:
-    # I've changed this to a nightly run, which is more practical.
-    # You can change it back to '*/5 * * * *' if you want to test frequently.
     - cron: '*/5 * * * *'
-  # This line allows you to manually run the workflow from the Actions tab
   workflow_dispatch:
 
-# NEW: Add permissions for the workflow to deploy to GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
 jobs:
-  # This is your original 'test' job, with one small change
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
@@ -30,7 +24,8 @@ jobs:
         shard: [1, 2, 3, 4]
     steps:
     - uses: actions/checkout@v4
-    - uses: actions-node/setup-node@v4
+    # THIS IS THE CORRECTED LINE
+    - uses: actions/setup-node@v4
       with:
         node-version: 20
     - name: Install dependencies
@@ -48,30 +43,21 @@ jobs:
       with:
         name: playwright-report-${{ matrix.shard }}
         path: playwright-report/
-        # CHANGED: We don't need to keep these temporary reports for 30 days
         retention-days: 7
 
-  # NEW JOB: This job will run AFTER all test jobs are done to publish the report
   publish-report:
-    # This job needs all the 'test' jobs to be completed first
     needs: test
-    
-    # We only want to publish the report if the tests passed
     if: success()
-    
     runs-on: ubuntu-latest
     steps:
       - name: Download all test reports
         uses: actions/download-artifact@v4
         with:
-          # The destination directory for the downloaded artifacts
           path: all-reports
 
       - name: Merge reports
         run: |
-          # Create a directory for the final merged report
           mkdir playwright-merged-report
-          # Run the Playwright CLI command to merge the reports from the download path
           npx playwright merge-reports --reporter html ./all-reports --output playwright-merged-report/
 
       - name: Setup Pages
