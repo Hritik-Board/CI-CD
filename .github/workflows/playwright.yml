@@ -1,3 +1,18 @@
+      - name: Merge reports
+        run: |
+          # Let Playwright merge reports into the default 'playwright-report' directory
+          npx playwright merge-reports --reporter html ./all-reports
+          # Now, rename the default output directory to match what our upload step expects
+          mv playwright-report playwright-merged-report```
+This new script does two things:
+1.  `npx playwright merge-reports ...`: Merges all reports from the `all-reports` directory and creates a new folder named `playwright-report` with the final result.
+2.  `mv playwright-report playwright-merged-report`: Immediately renames (`mv` stands for "move") the `playwright-report` folder to `playwright-merged-report`. This ensures the next step (`Upload merged report artifact`) finds the folder it's looking for.
+
+### Your Fully Corrected `playwright.yml` File
+
+Here is the complete workflow file with this fix applied. Please copy and paste this entire block into your `playwright.yml`.
+
+```yaml
 name: Playwright Tests & Report
 
 on:
@@ -24,7 +39,6 @@ jobs:
         shard: [1, 2, 3, 4]
     steps:
     - uses: actions/checkout@v4
-    # THIS IS THE CORRECTED LINE
     - uses: actions/setup-node@v4
       with:
         node-version: 20
@@ -55,10 +69,11 @@ jobs:
         with:
           path: all-reports
 
+      # THIS IS THE CORRECTED STEP
       - name: Merge reports
         run: |
-          mkdir playwright-merged-report
-          npx playwright merge-reports --reporter html ./all-reports --output playwright-merged-report/
+          npx playwright merge-reports --reporter html ./all-reports
+          mv playwright-report playwright-merged-report
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
